@@ -6,29 +6,8 @@
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-/* CSS same as before */
-    :root {
-        --bg-main: #1e1e2f;
-        --bg-box: #2a2a3f;
-        --bg-header: linear-gradient(90deg, #217346, #004d26);
-        --bg-footer: #004d26;
-        --text-main: white;
-        --text-input: #000;
-        --bg-input: #fff;
-        --accent: #217346;
-        --accent-gold: #FFD700;
-    }
-    body.light {
-        --bg-main: #f4f4f9;
-        --bg-box: #ffffff;
-        --bg-header: linear-gradient(90deg, #4CAF50, #2E7D32);
-        --bg-footer: #2E7D32;
-        --text-main: #222;
-        --text-input: #000;
-        --bg-input: #fff;
-        --accent: #4CAF50;
-        --accent-gold: #FF6F00;
-    }
+    :root {--bg-main: #1e1e2f; --bg-box: #2a2a3f; --bg-header: linear-gradient(90deg, #217346, #004d26);--bg-footer: #004d26; --text-main: white; --text-input: #000; --bg-input: #fff;--accent: #217346; --accent-gold: #FFD700;}
+    body.light {--bg-main: #f4f4f9; --bg-box: #ffffff; --bg-header: linear-gradient(90deg, #4CAF50, #2E7D32);--bg-footer: #2E7D32; --text-main: #222; --text-input: #000; --bg-input: #fff;--accent: #4CAF50; --accent-gold: #FF6F00;}
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: Calibri; background: var(--bg-main); color: var(--text-main); height: 100vh; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s; }
 .header { background: var(--bg-header); padding: 6px 10px; display: flex; align-items: center; justify-content: space-between; }
@@ -44,12 +23,16 @@
 .input-box { flex: 0.5; background: var(--bg-box); padding: 8px; border-radius: 6px; display: flex; flex-direction: column; }
 .input-box h3 { margin-bottom: 5px; text-align: center; font-size: 14px; background: var(--accent); color: white; padding: 4px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
     textarea { flex: 1; width: 100%; background: var(--bg-input); color: var(--text-input); border: 1px solid #ccc; padding: 6px; font-size: 13px; resize: none; font-family: Calibri; }
+.store-total { font-size: 16px; font-weight: bold; color: var(--accent-gold); text-align: center; padding: 5px; background: #000; border-radius: 4px; margin-top: 5px; }
 .table-box { flex: 3.5; background: var(--bg-box); padding: 8px; border-radius: 6px; display: flex; flex-direction: column; }
+.match-total-bar { font-size: 16px; font-weight: bold; color: #00FF00; text-align: center; padding: 6px; background: #000; border-radius: 4px; margin-bottom: 5px; }
 .table-scroll { flex: 1; overflow-y: auto; overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
     th { background: var(--accent); color: white; padding: 4px; border: 1px solid #444; position: sticky; top: 0; z-index: 1; white-space: nowrap; font-size: 13px; }
     td { padding: 3px 5px; border: 1px solid #ddd; background: var(--bg-input); color: var(--text-input); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     tr.match td { background: #FFFF00; color: black; font-weight: bold; }
+    tr.breakmatch td { background: #ADD8E6; color: black; font-weight: bold; }
+    tr.groupmatch td { background: #DDA0DD; color: black; font-weight: bold; }
     tr.bankonly td { background: #FFB6C1; color: black; }
     tr.storeonly td { background: #FFA07A; color: black; }
 .button-bar { background: #111; padding: 8px; text-align: center; }
@@ -59,33 +42,18 @@
 .clear-store-btn { background: #FF8C00; color: white; }
 .counter { color: var(--accent-gold); font-weight: bold; font-size: 13px; }
 .file-info { font-size: 11px; color: #90EE90; text-align: center; margin-top: 3px; }
-.footer {
-        background: var(--bg-footer);
-        color: var(--accent-gold);
-        text-align: center;
-        padding: 10px;
-        font-size: 11px;
-        font-weight: 500;
-        letter-spacing: 0.3px;
-        border-top: 1px solid var(--accent);
-        line-height: 1.6;
-    }
+.footer { background: var(--bg-footer); color: var(--accent-gold); text-align: center; padding: 10px; font-size: 11px; font-weight: 500; letter-spacing: 0.3px; border-top: 1px solid var(--accent); line-height: 1.6; }
 .footer.brand { font-size: 12px; font-weight: bold; color: #fff; }
-.footer.contact { font-size: 12px; color: #fff; margin: 3px 0; }
-.footer.links a,
-.footer.links a:visited,
-.footer.links a:hover { color: #FFFFFF!important; text-decoration: none; margin: 0 5px; }
-.footer.links a:hover { text-decoration: underline; }
 .hidden { display: none; }
 .small-btn { font-size:10px; padding:2px 6px; background:#C00000; color:white; border:none; border-radius:3px; cursor:pointer; }
 </style>
 </head>
 <body>
     <div class="header">
-        <img src="attachment://27886832211017108" alt="Active8 Logo" class="logo">
+        <img src="https://placehold.co/45x45/217346/FFD700?text=A8" alt="Active8 Logo" class="logo">
         <div class="header-center">
             <h1>DATA MATCHER</h1>
-            <p>HM-AURA | Developed by SHARJEEL SIDDIQUI <span class="counter" id="counter"></span></p>
+            <p>HM-AURA V14.4 | Developed by SHARJEEL SIDDIQUI <span class="counter" id="counter"></span></p>
         </div>
         <button class="theme-btn" onclick="toggleTheme()">🌙 Dark/Light</button>
     </div>
@@ -96,7 +64,7 @@
         <label>Type:</label>
         <select id="typeFilter" onchange="filterChanged()"><option value="">--Select Type--</option></select>
         <label>Market:</label>
-        <select id="marketFilter" onchange="filterChanged()"><option value="">--Select Market--</option></select>
+        <select id="marketFilter" onchange="marketChanged()"><option value="">--Select Market--</option></select>
         <label>Store ID:</label>
         <select id="storeIdFilter" onchange="filterChanged()"><option value="">--Select Store ID--</option></select>
     </div>
@@ -109,9 +77,11 @@
         </div>
         <div class="input-box">
             <h3>STORE DATA <button class="small-btn" onclick="clearStoreOnly()">CLEAR</button></h3>
-            <textarea id="store" placeholder="Store ka data paste karo aur CHECK dabao"></textarea>
+            <textarea id="store" placeholder="Store ka data paste karo" oninput="calculateStoreTotal()"></textarea>
+            <div class="store-total" id="storeTotal">Store Total: 0.00</div>
         </div>
         <div class="table-box">
+            <div class="match-total-bar" id="matchTotal">Matched Total: 0.00</div>
             <div class="table-scroll">
                 <table id="resultTable">
                     <thead><tr><th style="width:4%">S#</th><th style="width:23%">Bank Amount</th><th style="width:23%">Store Amount</th><th style="width:50%">Status</th></tr></thead>
@@ -128,138 +98,162 @@
     </div>
 
     <div class="footer">
-        <div class="brand">HM-AURA | Developed by SHARJEEL SIDDIQUI</div>
+        <div class="brand">HM-AURA V14.4 | Developed by SHARJEEL SIDDIQUI</div>
         <div class="contact">📞 For Support & Contact: <b>0092-333-3161173</b></div>
         <div>© 2026 HM-AURA. All Rights Reserved.</div>
-        <div class="links">
-            <a href="#">Privacy Policy</a> |
-            <a href="#">Terms of Service</a> |
-            <a href="#">Support</a>
-        </div>
-        <div style="font-size:10px; color:#ccc;">For internal business use only. Unauthorized distribution is prohibited.</div>
     </div>
 
 <script>
-let rawBankData = [];
-let filteredBankData = [];
-let headers = [];
+let rawBankData = []; let filteredBankData = []; let headers = [];
 
-function toggleTheme() {
-    document.body.classList.toggle('light');
-    let btn = document.querySelector('.theme-btn');
-    btn.innerText = document.body.classList.contains('light')? '🌙 Dark Mode' : '☀️ Light Mode';
-}
+function toggleTheme() {document.body.classList.toggle('light');let btn = document.querySelector('.theme-btn');btn.innerText = document.body.classList.contains('light')? '🌙 Dark Mode' : '☀️ Light Mode';}
 
 function loadBankFile(event) {
-    let file = event.target.files[0];
-    if(!file) return;
-    let ext = file.name.split('.').pop().toLowerCase();
-    let reader = new FileReader();
+    let file = event.target.files[0]; if(!file) return;
+    let ext = file.name.split('.').pop().toLowerCase(); let reader = new FileReader();
     reader.onload = function(e) {
         let data = e.target.result; let rows = [];
-        if(ext === 'xlsx' || ext === 'xls'){
-            let workbook = XLSX.read(data, {type: 'binary'});
-            let sheet = workbook.Sheets[workbook.SheetNames[0]];
-            rows = XLSX.utils.sheet_to_json(sheet, {header:1, defval:""});
-        } else { rows = data.split('\n').map(r => r.split(',')); }
-
-        headers = rows[0].map(h => h.toString().trim().toLowerCase());
-        let dataRows = rows.slice(1);
-
-        // FIXED COLUMN DETECTION - Priority wala
+        if(ext === 'xlsx' || ext === 'xls'){let workbook = XLSX.read(data, {type: 'binary'});let sheet = workbook.Sheets[workbook.SheetNames[0]];rows = XLSX.utils.sheet_to_json(sheet, {header:1, defval:""});}
+        else { rows = data.split('\n').map(r => r.split(',')); }
+        headers = rows[0].map(h => h.toString().trim().toLowerCase()); let dataRows = rows.slice(1);
         let typeIdx = headers.findIndex(h => h === 'type' || h === 'transaction type');
         let marketIdx = headers.findIndex(h => h === 'market');
         let storeIdx = headers.findIndex(h => h === 'store id' || h === 'storeid' || h === 'store');
         let amountIdx = headers.findIndex(h => h === 'deposits /credits' || h === 'deposits' || h === 'credit' || h === 'amount');
-
-        console.log("Columns Found:", {typeIdx, marketIdx, storeIdx, amountIdx});
-
-        rawBankData = dataRows.filter(x=>x[amountIdx]).map(cols => ({
-            type: cols[typeIdx]?.toString().trim() || '',
-            market: cols[marketIdx]?.toString().trim() || '',
-            storeId: cols[storeIdx]?.toString().trim() || '',
-            amount: cols[amountIdx]?.toString().trim() || '',
-            raw: cols.join(',')
-        }));
+        rawBankData = dataRows.filter(x=>x[amountIdx]).map(cols => ({type: cols[typeIdx]?.toString().trim() || '',market: cols[marketIdx]?.toString().trim() || '',storeId: cols[storeIdx]?.toString().trim() || '',amount: parseFloat(cols[amountIdx]?.toString().replace(/,/g,'')) || 0,raw: cols.join(',')}));
         document.getElementById('fileInfo').innerText = `Loaded: ${file.name} | Total: ${rawBankData.length} rows`;
-        document.getElementById('filterBar').classList.remove('hidden');
-        populateDropdowns();
+        document.getElementById('filterBar').classList.remove('hidden'); populateDropdowns();
     };
-    if(ext === 'xlsx' || ext === 'xls') reader.readAsBinaryString(file);
-    else reader.readAsText(file);
+    if(ext === 'xlsx' || ext === 'xls') reader.readAsBinaryString(file); else reader.readAsText(file);
 }
 
 function populateDropdowns() {
     let types = [...new Set(rawBankData.map(x=>x.type))].filter(Boolean).sort();
     let markets = [...new Set(rawBankData.map(x=>x.market))].filter(Boolean).sort();
-    let storeIds = [...new Set(rawBankData.map(x=>x.storeId))].filter(Boolean).sort();
-    fillSelect('typeFilter', types); fillSelect('marketFilter', markets); fillSelect('storeIdFilter', storeIds);
+    fillSelect('typeFilter', types); fillSelect('marketFilter', markets); fillSelect('storeIdFilter', []);
 }
-
-function fillSelect(id, arr) {
-    let sel = document.getElementById(id);
-    sel.innerHTML = `<option value="">--Select ${id.replace('Filter','')}--</option>`;
-    arr.forEach(v => { if(v) sel.innerHTML += `<option value="${v}">${v}</option>`; });
+function marketChanged() {
+    let selectedMarket = document.getElementById('marketFilter').value;
+    let stores = [...new Set(rawBankData.filter(x =>!selectedMarket || x.market === selectedMarket).map(x=>x.storeId))].filter(Boolean).sort();
+    fillSelect('storeIdFilter', stores); filterChanged();
 }
-
-function filterChanged() {
-    applyFilter();
-    clearStoreOnly();
-}
-
+function fillSelect(id, arr) {let sel = document.getElementById(id);sel.innerHTML = `<option value="">--Select ${id.replace('Filter','')}--</option>`;arr.forEach(v => { if(v) sel.innerHTML += `<option value="${v}">${v}</option>`; });}
+function filterChanged() {applyFilter(); clearStoreOnly();}
 function applyFilter() {
-    let t = document.getElementById('typeFilter').value;
-    let m = document.getElementById('marketFilter').value;
-    let s = document.getElementById('storeIdFilter').value;
-    filteredBankData = rawBankData.filter(x =>
-        (!t || x.type === t) && (!m || x.market === m) && (!s || x.storeId === s)
-    );
+    let t = document.getElementById('typeFilter').value; let m = document.getElementById('marketFilter').value; let s = document.getElementById('storeIdFilter').value;
+    filteredBankData = rawBankData.filter(x =>(!t || x.type === t) && (!m || x.market === m) && (!s || x.storeId === s));
     document.getElementById('bank').value = filteredBankData.map(x=>x.amount).join('\n');
 }
+function calculateStoreTotal() {
+    let storeRaw = document.getElementById('store').value.split('\n').filter(x=>x.trim()); let total = 0;
+    storeRaw.forEach(line => {let num = parseFloat(line.replace(/,/g,'')); if(!isNaN(num)) total += num;});
+    document.getElementById('storeTotal').innerText = `Store Total: ${total.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+}
 
-function normalizeValue(val) {
-    val = val.replace(/,/g,'').trim();
-    if(!isNaN(val) && val!== "") return parseFloat(val).toString();
-    return val.toLowerCase();
+function getCombinations(arr, len) {
+    let result = [];
+    function recurse(start, path){
+        if(path.length === len) {result.push([...path]); return;}
+        for(let i=start; i<arr.length; i++){path.push(arr[i]); recurse(i+1, path); path.pop();}
+    }
+    recurse(0, []); return result;
 }
 
 function checkData() {
     if(filteredBankData.length === 0) { alert("Pehle File load karke 3no dropdown select karo!"); return; }
     let storeRaw = document.getElementById('store').value.split('\n').filter(x=>x.trim());
-    let storeMap = new Map();
-    storeRaw.forEach(line => { let key = normalizeValue(line); if(!storeMap.has(key)) storeMap.set(key, []); storeMap.get(key).push(line); });
+    let storeAmts = storeRaw.map((x,i) => ({val: parseFloat(x.replace(/,/g,'')), idx: i})).filter(x=>!isNaN(x.val));
+    let bankAmts = filteredBankData.map((x,i) => ({val: x.amount, idx: i}));
+    let tableHTML = ""; let matchCount = 0; let matchTotal = 0;
+    let usedStoreIdx = new Set(); let usedBankIdx = new Set();
 
-    let tableHTML = ""; let matchCount = 0; let usedStore = new Set();
-    filteredBankData.forEach((bankObj, i) => {
-        let key = normalizeValue(bankObj.amount);
-        if(storeMap.has(key) && storeMap.get(key).length > 0) {
-            let storeLine = storeMap.get(key).shift(); usedStore.add(storeLine);
-            tableHTML += `<tr class="match"><td>${i+1}</td><td title="${bankObj.raw}">${bankObj.amount}</td><td title="${storeLine}">${storeLine}</td><td>MATCH</td></tr>`;
-            matchCount++;
-        } else {
-            tableHTML += `<tr class="bankonly"><td>${i+1}</td><td title="${bankObj.raw}">${bankObj.amount}</td><td></td><td>NOT IN STORE</td></tr>`;
+    // 1. Exact Match
+    storeAmts.forEach(s => {
+        if(usedStoreIdx.has(s.idx)) return;
+        let bIdx = bankAmts.findIndex(b => Math.abs(b.val - s.val) < 0.01 &&!usedBankIdx.has(b.idx));
+        if(bIdx!== -1) {
+            usedStoreIdx.add(s.idx); usedBankIdx.add(bankAmts[bIdx].idx);
+            tableHTML += `<tr class="match"><td>${s.idx+1}</td><td>${bankAmts[bIdx].val.toFixed(2)}</td><td>${s.val.toFixed(2)}</td><td>EXACT MATCH</td></tr>`;
+            matchCount++; matchTotal += s.val;
         }
     });
-    storeRaw.forEach(storeLine => { if(!usedStore.has(storeLine)) {
-        tableHTML += `<tr class="storeonly"><td></td><td></td><td title="${storeLine}">${storeLine}</td><td>NOT IN BANK</td></tr>`;
-    }});
+
+    // 2. Break Match 1 Store vs Many Bank
+    storeAmts.forEach(s => {
+        if(usedStoreIdx.has(s.idx)) return;
+        let availableBank = bankAmts.filter(b =>!usedBankIdx.has(b.idx));
+        for(let len=2; len<=3; len++){
+            let combos = getCombinations(availableBank, len);
+            for(let combo of combos){
+                let sum = combo.reduce((a,b)=>a+b.val,0);
+                if(Math.abs(sum - s.val) < 0.01) {
+                    let bankText = combo.map(c=>c.val.toFixed(2)).join(' + ');
+                    combo.forEach(c => usedBankIdx.add(c.idx));
+                    usedStoreIdx.add(s.idx);
+                    tableHTML += `<tr class="breakmatch"><td>${s.idx+1}</td><td>${bankText}</td><td>${s.val.toFixed(2)}</td><td>BREAK MATCH</td></tr>`;
+                    matchCount++; matchTotal += s.val;
+                    return;
+                }
+            }
+        }
+    });
+
+    // 3. GROUP MATCH: Many Store vs Many Bank - POORE DATA ME CHECK [NEW LOGIC]
+    let loop = true;
+    while(loop){
+        loop = false;
+        let remainingStore = storeAmts.filter(s =>!usedStoreIdx.has(s.idx));
+        let remainingBank = bankAmts.filter(b =>!usedBankIdx.has(b.idx));
+
+        for(let sLen=2; sLen<=3; sLen++){
+            for(let bLen=1; bLen<=3; bLen++){
+                let sCombos = getCombinations(remainingStore, sLen);
+                for(let sCombo of sCombos){
+                    let sSum = sCombo.reduce((a,b)=>a+b.val,0);
+                    let bCombos = getCombinations(remainingBank, bLen);
+                    for(let bCombo of bCombos){
+                        let bSum = bCombo.reduce((a,b)=>a+b.val,0);
+                        if(Math.abs(sSum - bSum) < 0.01) {
+                            // Group mil gaya. Alag alag row me print karo
+                            let maxLen = Math.max(sCombo.length, bCombo.length);
+                            for(let i=0; i<maxLen; i++){
+                                let sVal = i < sCombo.length? sCombo[i].val.toFixed(2) : '';
+                                let bVal = i < bCombo.length? bCombo[i].val.toFixed(2) : '';
+                                let sIdx = i < sCombo.length? sCombo[i].idx+1 : '';
+                                tableHTML += `<tr class="groupmatch"><td>${sIdx}</td><td>${bVal}</td><td>${sVal}</td><td>GROUP MATCH</td></tr>`;
+                            }
+                            sCombo.forEach(c => usedStoreIdx.add(c.idx));
+                            bCombo.forEach(c => usedBankIdx.add(c.idx));
+                            matchCount++; matchTotal += sSum;
+                            loop = true; // dobara check karo
+                            break;
+                        }
+                    }
+                    if(loop) break;
+                }
+                if(loop) break;
+            }
+            if(loop) break;
+        }
+    }
+
+    // 4. Unmatched
+    storeAmts.forEach(s => {if(!usedStoreIdx.has(s.idx))tableHTML += `<tr class="storeonly"><td>${s.idx+1}</td><td></td><td>${s.val.toFixed(2)}</td><td>NOT IN BANK</td></tr>`;});
+    bankAmts.forEach(b => {if(!usedBankIdx.has(b.idx))tableHTML += `<tr class="bankonly"><td></td><td>${b.val.toFixed(2)}</td><td></td><td>NOT IN STORE</td></tr>`;});
+
     document.getElementById('resultBody').innerHTML = tableHTML;
     document.getElementById('counter').innerText = ` | Total Match: ${matchCount}`;
+    document.getElementById('matchTotal').innerText = `Matched Total: ${matchTotal.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
 }
-
 function clearStoreOnly() {
-    document.getElementById('store').value = "";
-    document.getElementById('resultBody').innerHTML = "";
-    document.getElementById('counter').innerText = "";
+    document.getElementById('store').value = ""; document.getElementById('resultBody').innerHTML = "";
+    document.getElementById('counter').innerText = ""; document.getElementById('storeTotal').innerText = "Store Total: 0.00";
+    document.getElementById('matchTotal').innerText = "Matched Total: 0.00";
 }
-
 function clearAll() {
-    rawBankData = []; filteredBankData = []; headers = [];
-    document.getElementById('bank').value = "";
-    clearStoreOnly();
-    document.getElementById('fileInfo').innerText = "No file loaded";
-    document.getElementById('bankFile').value = "";
-    document.getElementById('filterBar').classList.add('hidden');
+    rawBankData = []; filteredBankData = []; headers = []; document.getElementById('bank').value = "";
+    clearStoreOnly(); document.getElementById('fileInfo').innerText = "No file loaded";
+    document.getElementById('bankFile').value = ""; document.getElementById('filterBar').classList.add('hidden');
 }
 </script>
 </body>
